@@ -1,3 +1,7 @@
+# Mac Storage
+.DS_Store
+# Jet Brains IDE configuration files
+.idea/
 # Logs
 logs
 *.log
