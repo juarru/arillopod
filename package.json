@@ -1,0 +1,23 @@
+{
+  "name": "arillopod",
+  "version": "1.0.0",
+  "description": "Juan Arillo´s pod group test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juarru/arillopod.git"
+  },
+  "author": "Juan Arillo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/juarru/arillopod/issues"
+  },
+  "homepage": "https://github.com/juarru/arillopod#readme",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "mongodb": "^3.1.8"
+  }
+}
