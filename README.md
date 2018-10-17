@@ -12,3 +12,10 @@ For managing environment files, in order to keep isolated sensible data ([dotenv
 
 Package for managing mongo db connections and work with collections and data.
 
+### request
+
+Package for API connections.
+
+### csv-writer
+
+To generate csv files
