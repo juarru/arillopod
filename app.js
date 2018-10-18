@@ -2,11 +2,17 @@
 require("dotenv").config();
 var MongoClient = require("mongodb").MongoClient;
 var request = require('request');
-var csvwriter = require('csv-writer');
 var fs = require('fs');
+const csv=require('csvtojson');
 
-get_mongo_values();
+// get_mongo_values();
 // get_api_values().then(save_api_values);
+
+const csvFilePath='./csv/api_data.csv';
+csv().fromFile(csvFilePath).then((jsonObject) => {
+	console.log(jsonObject);
+});
+
 
 /* ---- Auxiliar functions ---- */
 function get_mongo_values() {

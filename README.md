@@ -16,6 +16,6 @@ Package for managing mongo db connections and work with collections and data.
 
 Package for API connections.
 
-### csv-writer
+### csvtojson
 
-To generate csv files
+To generate a json from a csv file
