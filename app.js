@@ -5,12 +5,16 @@ var request = require('request');
 var fs = require('fs');
 const csv=require('csvtojson');
 
-// get_mongo_values();
+// var source1 = get_mongo_values();
 // get_api_values().then(save_api_values);
 
 const csvFilePath='./csv/api_data.csv';
 csv().fromFile(csvFilePath).then((jsonObject) => {
-	console.log(jsonObject);
+	var i = 0;
+	for(record in jsonObject){
+		i = i+1;
+		console.log(i);
+	}
 });
 
 
@@ -30,7 +34,7 @@ function get_mongo_values() {
         try {
 			var dbo = db.db(process.env.MG_DATABASE);
 			var mongo_data = dbo.collection(process.env.MG_COLLECTION).find({'call.startTime': {$gte: '2018-05-01 00:00:00', $lte: '2018-05-01 23:59:59' }, 'call.endTime' : {$gte: '2018-05-01 00:00:00', $lte: '2018-05-01 23:59:59'}}).toArray();
-			console.log(mongo_data);
+			return(mongo_data);
         } catch (e) {
             console.log(e);
 		}
