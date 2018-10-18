@@ -26,19 +26,7 @@ console.log(url);
 // });
 
 // Retrieving data from API and writing into CSV file
-get_api_values().then(function (data) {
-    try {
-        fs.writeFile("csv/api_data.csv", data, function(err) {
-            if(err) {
-                return console.log(err);
-            }
-
-            console.log("The file was saved!");
-        });
-    } catch (e) {
-        console.log(e);
-    }
-});
+get_api_values().then(save_api_values);
 
 /* ---- Auxiliar functions ---- */
 function get_api_values(){
@@ -60,5 +48,19 @@ function get_api_values(){
             }
         })
     });
+}
+
+function save_api_values(data) {
+    try {
+        fs.writeFile("csv/api_data.csv", data, function(err) {
+            if(err) {
+                return console.log(err);
+            }
+
+            console.log("The file was saved!");
+        });
+    } catch (e) {
+        console.log(e);
+    }
 }
 
