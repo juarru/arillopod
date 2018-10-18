@@ -5,30 +5,33 @@ var request = require('request');
 var csvwriter = require('csv-writer');
 var fs = require('fs');
 
-// Connecting to MongoDB and retrieving data.
-var url = "mongodb://" + process.env.MG_USER + ":" + process.env.MG_PWD + "@" + process.env.MG_HOST + ":" + process.env.MG_PORT + "/" + process.env.MG_DATABASE;
-console.log(url);
-// MongoClient.connect(url, { useNewUrlParser: true },  function (err, db) {
-//     if(!err){
-//         console.log("Connection OK");
-//     } else {
-//         console.log(err);
-//     }
-//
-//     // Getting collection data
-//     var dbo = db.db(process.env.MG_DATABASE);
-//     dbo.collection(process.env.MG_COLLECTION).findOne({'call.startTime': {$gte: new Date('2018-05-01 00:00:00'), $lte: new Date('2018-05-01 23:59:59') }}, function (err, result) {
-//         if (err) throw err;
-//         console.log(result);
-//     });
-//
-//     db.close();
-// });
-
-// Retrieving data from API and writing into CSV file
-get_api_values().then(save_api_values);
+get_mongo_values();
+// get_api_values().then(save_api_values);
 
 /* ---- Auxiliar functions ---- */
+function get_mongo_values() {
+	// Connecting to MongoDB and retrieving data.
+	var url = "mongodb://" + process.env.MG_USER + ":" + process.env.MG_PWD + "@" + process.env.MG_HOST + ":" + process.env.MG_PORT + "/" + process.env.MG_DATABASE;
+	console.log(url);
+	MongoClient.connect(url, { useNewUrlParser: true },  function (err, db) {
+		if(!err){
+			console.log("Connection OK");
+		} else {
+			console.log(err);
+		}
+
+		// Getting collection data
+        try {
+			var dbo = db.db(process.env.MG_DATABASE);
+			var mongo_data = dbo.collection(process.env.MG_COLLECTION).find({'call.startTime': {$gte: '2018-05-01 00:00:00', $lte: '2018-05-01 23:59:59' }, 'call.endTime' : {$gte: '2018-05-01 00:00:00', $lte: '2018-05-01 23:59:59'}}).toArray();
+			console.log(mongo_data);
+        } catch (e) {
+            console.log(e);
+		}
+		db.close();
+	});
+}
+
 function get_api_values(){
     // Connecting to API
     var options = {
