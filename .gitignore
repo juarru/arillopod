@@ -59,7 +59,9 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+#.env
 
+# csv files
+/csv/api_data.csv
 # next.js build output
 .next
