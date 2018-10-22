@@ -94,7 +94,6 @@ function read_stored_csv(data) {
     const csvFilePath='./csv/api_data.csv';
     console.log('Reading source 2 csv data ...');
     return new Promise(function (resolve, reject) {
-        console.log('Reading data from csv ...');
         try {
             csv().fromFile(csvFilePath).then((jsonObject) => {
                 resolve([data, jsonObject]);
@@ -110,23 +109,28 @@ function compare_sources(data) {
     return new Promise(function (resolve) {
         console.log('Collating sources ...');
         try {
-            data[1].forEach(function (element) {
-                var exist = 0;
-                var new_iccid = "";
-                if(element.iccid.indexOf("'") != -1){
-                    new_iccid = element.iccid.replace("'", "");
-                } else {
-                    new_iccid = element.iccid;
-                }
-                data[0][0].forEach(function (file) {
-                    if(file.iccid == new_iccid && file.call.startTime == element['startTime(UTC)'] && file.call.endTime == element['endTime(UTC)']){
-                        exist = 1;
-                    }
-                });
-                if(exist == 0){
-                    result.push(element);
-                }
-            });
+            // data[1].forEach(function (element) {
+			for (var i=0; i < data[1].length(); i++) {
+				var exist = 0;
+				var new_iccid = "";
+				if (element.iccid.indexOf("'") != -1) {
+					new_iccid = element.iccid.replace("'", "");
+				} else {
+					new_iccid = element.iccid;
+				}
+				// data[0][0].forEach(function (file) {
+				for (var j=0; j < data[0][0].length; j++) {
+					if (file.iccid == new_iccid && file.call.startTime == element['startTime(UTC)'] && file.call.endTime == element['endTime(UTC)']) {
+						exist = 1;
+						break;
+					}
+				}
+				// });
+				if (exist == 0) {
+					result.push(element);
+				}
+			}
+            // });
             console.log('Retrieved different data');
             resolve(result);
         } catch (e) {
