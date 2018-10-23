@@ -145,7 +145,11 @@ function read_stored_csv(data) {
 function compare_sources(data) {
     var result = [];
     return new Promise(function (resolve) {
-        if(data[1] && data[0][0] && data[1].length !== data[0][0].length){
+    	if(data[0][0] == undefined){
+    		console.log('There is no data in this hour for source 1. All the data from source 2 is new.');
+    		resolve(data[1]);
+		}
+        else if(data[1].length !== data[0][0].length){
             console.log('Collating sources ...');
             try {
                 for (var i=0; i < data[1].length; i++) {
