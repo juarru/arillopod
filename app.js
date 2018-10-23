@@ -9,8 +9,17 @@ const fileName = './csv/result.csv';
 
 var result =[];
 var hour;
+
+/**
+ *
+ * This function retrieves all the different data from the two sources.
+ * It compares hour by hour. If the number of records is the same, it´s supposed there is
+ * no difference.
+ *
+ * @returns {Promise<void>}
+ */
 async function get_result(){
-    for(hour = 9; hour < 10; hour++){
+    for(hour = 0; hour < 24; hour++){
         console.log('Hour: ' + (hour + 1));
         await get_mongo_values(hour.toString)
             .then(get_api_values)
@@ -21,18 +30,27 @@ async function get_result(){
     }
 }
 
+/**
+ * If different data exists, the function generates a csv file
+ * with those different records.
+ */
 get_result().then(function (){
     try {
         if(result.length > 0){
-            json(result, fileName)
+            // console.log(result);
+            json(result[0], fileName)
                 .then(() => {
                     console.log('File result saved!');
+                    return process.exit();
                 })
                 .catch(error => {
                     console.log(error);
-                })
+                    return false;
+                });
+
         } else {
             console.log('No data found');
+            return true;
         }
     } catch (e) {
         console.log(e);
@@ -42,6 +60,11 @@ get_result().then(function (){
 
 
 /* ---- Auxiliar functions ---- */
+
+/**
+ * Gets source 1 records
+ * @returns {Promise<any>}
+ */
 function get_mongo_values() {
 	// Connecting to MongoDB and retrieving data.
 	var url = "mongodb://" + process.env.MG_USER + ":" + process.env.MG_PWD + "@" + process.env.MG_HOST + ":" + process.env.MG_PORT + "/" + process.env.MG_DATABASE;
@@ -84,6 +107,11 @@ function get_mongo_values() {
     });
 }
 
+/**
+ * Gets source 2 records
+ * @param data
+ * @returns {Promise<any>}
+ */
 function get_api_values(data){
     // Parsing hour value
     var str_hour2 = '';
@@ -113,6 +141,11 @@ function get_api_values(data){
     });
 }
 
+/**
+ * Saves source 2 records into a csv file for later collation
+ * @param data
+ * @returns {Promise<any>}
+ */
 function save_api_values(data) {
     return new Promise(function (resolve, reject) {
         try {
@@ -129,6 +162,11 @@ function save_api_values(data) {
     });
 }
 
+/**
+ * Gets second source stored records from csv
+ * @param data
+ * @returns {Promise<any>}
+ */
 function read_stored_csv(data) {
     const csvFilePath='./csv/api_data.csv';
     return new Promise(function (resolve, reject) {
@@ -142,6 +180,11 @@ function read_stored_csv(data) {
     });
 }
 
+/**
+ * Compare both sources records if the number of them is different.
+ * @param data
+ * @returns {Promise<any>}
+ */
 function compare_sources(data) {
     var result = [];
     return new Promise(function (resolve) {
@@ -183,6 +226,11 @@ function compare_sources(data) {
     })
 }
 
+/**
+ * Save different data into an Object for later manage
+ * @param data
+ * @returns {Promise<any>}
+ */
 function save_final_result(data) {
     return new Promise(function (resolve) {
         try {
